@@ -6,6 +6,9 @@ use std::{thread, time};
 use std::io::{self, Write};
 use rand::distributions::{Distribution, Uniform};
 
+extern crate stopwatch;
+use stopwatch::{Stopwatch};
+
 const PAUSE: [u16; 5] = [15, 25, 35, 35, 100];
 
 #[tokio::main]
@@ -13,7 +16,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let link = "https://raw.githubusercontent.com/BenRoe/MMM-SystemStats/master/MMM-SystemStats.js";
 
+    // Stopwatch start
+    let sw = Stopwatch::start_new();
     let resp = reqwest::get(link).await?.text().await?;
+    // Stopwatch end
+    println!("Thing took {}ms", sw.elapsed_ms());
 
     process_file(resp);
 
